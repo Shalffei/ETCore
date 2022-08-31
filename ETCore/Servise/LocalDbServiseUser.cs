@@ -10,9 +10,9 @@ using Microsoft.EntityFrameworkCore.SqlServer;
 
 namespace ETCore.Servise
 {
-    public static class LocalDbServise
+    public static class LocalDbServiseUser
     {
-        public static void AddToDb(ApplicationContext db, UserList userList)
+        public static void AddToDbUserList(ApplicationContextUser db, UserList userList)
         {
             foreach (var item in userList.DbUsersList)
             {
@@ -21,20 +21,20 @@ namespace ETCore.Servise
             }
             Console.WriteLine("Object Added");
         }
-        public static void RemuveFromDbUser(ApplicationContext db, User user)
+        public static void RemoveFromDbUser(ApplicationContextUser db, User user)
         {
             db.Remove(user);
             db.SaveChanges();
             Console.WriteLine("Remuve successfuly");
         }
-        public static void ChangesToDbUser(ApplicationContext db, User user)
+        public static void ChangesToDbUser(ApplicationContextUser db, User user)
         {
             db.Users.Update(user);
             db.SaveChanges();
             Console.WriteLine("Changes was saved");
         }
 
-        public static List<User> GetFromDb(ApplicationContext db)
+        public static List<User> GetFromDbUserList(ApplicationContextUser db)
         {
             List<User> result = db.Users.ToList();
             return result;    

@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ETCore.Models
 {
-    public class ApplicationContext : DbContext
+    public class ApplicationContextUser : DbContext
     {
         public DbSet<User> Users { get; set; }
-        public ApplicationContext()
+        public ApplicationContextUser()
         {
             Database.EnsureCreated();
         }
