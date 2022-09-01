@@ -16,8 +16,13 @@ namespace ETCore.Servise
             db.SaveChanges();
             Console.WriteLine("Object Added");
         }
-        public static void AddToDbOrder(ApplicationContext db, List<Order> order)
+        public static void AddToTrashOrders(ApplicationContext db, List<Order> order, int userId)
         {
+            foreach (var item in order)
+            {
+                item.UserId = userId;
+            }
+
             foreach (var item in order)
             {
                 db.Orders.Add(item);
@@ -43,21 +48,48 @@ namespace ETCore.Servise
             List<Order> result = db.Orders.ToList();
             return result;
         }
-        public static List<Order> GetUserOrders(ApplicationContext db, int UserId)
+        public static void BuyOrders(ApplicationContext db, int userId, List<int> ordersId)
         {
-            var result = db.Orders.Include(x => x.User).Where(x => x.UserId == 1).OrderBy(x => x.Price).ToList();
-            int count = 0;
-            foreach (var item in result)
+            List<Order> orders = db.Orders.Where(x=> x.UserId == userId).ToList();
+            User user = db.Users.Where(x => x.Id == userId).Single();
+            decimal totalOrdersPrice = 0;
+            foreach (var item in orders)
             {
-                if (count == 0)
-                {
-                    Console.WriteLine($"User {item.User.Name} have orders:");
-
-                }
-                count++;
-                Console.WriteLine($"{count}. {item.Name} \t Price: {item.Price} \t OrerID: {item.Id} ");
+               totalOrdersPrice = orders.Sum(x => x.Price);
             }
-            return result;
+            if (totalOrdersPrice <= user.MoneyBalance)
+            {
+                user.MoneyBalance -= totalOrdersPrice;
+                db.Users.Update(user);
+                foreach (var item in orders)
+                {
+                    item.IsPaid = true;
+                }
+                db.SaveChanges();
+                Console.WriteLine("Order successfully purchased");
+            }
+            else
+            {
+                Console.WriteLine("You don't have enough money");
+            }
+        }
+        public static void RemoveOrderFromTrash (ApplicationContext db, int userId, List<int> ordersId)
+        {
+            List<Order> orders = db.Orders.Where(x => x.UserId == userId).ToList();
+
+            for (int i = 0; i < orders.Count; i++)
+            {
+                for (int j = 0; j < ordersId.Count; j++)
+                {
+                    if (orders[i].Id == ordersId[j] && orders[i].IsPaid != true)
+                    {
+                        db.Orders.Remove(orders[i]);
+                        db.SaveChanges();
+                    }
+                    else
+                        continue;
+                }
+            }
         }
     }
 }

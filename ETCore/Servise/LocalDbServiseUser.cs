@@ -45,5 +45,16 @@ namespace ETCore.Servise
             return result;    
 
         }
+        public static User GetUserOrders(ApplicationContext db, User user)
+        {
+            var result = db.Users.Include(x => x.UserOrders).Where(x => x.Id == user.Id).Single();
+            Console.WriteLine($"All orders {user.Name}:");
+            foreach (var item in result.UserOrders)
+            {
+                int count = 1;
+                Console.WriteLine($"{count}. {item.Name} \t Price: {item.Price} \t OrerID: {item.Id} ");
+            }
+            return result;
+        }
     }
 }

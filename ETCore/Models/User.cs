@@ -10,7 +10,8 @@ namespace ETCore.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public decimal MoneyBalanse { get; set; }
+        public decimal MoneyBalance { get; set; }
+        public List<Order> UserOrders { get; set; } = new List<Order>();
 
     }
 }

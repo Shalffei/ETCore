@@ -13,7 +13,7 @@ namespace ETCore.Models
         public string Name { get; set; }
         public decimal Price { get; set; }
         public bool IsPaid { get; set; }
-        public User User { get; set; } 
+        public User User { get; set; }
 
     }
 }
