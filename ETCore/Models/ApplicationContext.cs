@@ -1,22 +1,24 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace ETCore.Models
 {
-    public class ApplicationContextOrder : DbContext
+    public class ApplicationContext : DbContext
     {
+        public DbSet<User> Users { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public ApplicationContextOrder()
+        public ApplicationContext()
         {
+            Database.EnsureDeleted();
             Database.EnsureCreated();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=OredTable;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=UserTable;Trusted_Connection=True;");
         }
-    }
+    } 
 }
